@@ -30,7 +30,7 @@ jobs:
 
       - name: Run backend tests
         run: |
-OB          cd Backend
+          cd Backend
           pytest
 
       - name: Set up Node.js
@@ -40,17 +40,16 @@ OB          cd Backend
 
       - name: Install frontend dependencies
         run: |
-          cd frontend-app
+          cd Frontend/frontend-app
           npm install
 
       - name: Run frontend tests
         run: |
-          cd frontend-app
+          cd Frontend/frontend-app
           npm test -- --watchAll=false
 
       - name: Build frontend
         run: |
-          cd frontend-app
+          cd Frontend/frontend-app
           npm run build
 
-      # You can add more steps here, like deploying to a cloud service if needed.
