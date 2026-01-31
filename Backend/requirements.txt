@@ -1,12 +1,5 @@
-- name: Install backend dependencies
-  run: |
-    cd Backend
-    python -m venv venv
-    venv/bin/python -m pip install --upgrade pip
-    venv/bin/pip install -r requirements.txt
+Flask==2.0.3
+pytest==7.1.2
 
-- name: Run backend tests
-  run: |
-    cd Backend
-    venv/bin/python -m pytest
+
 
