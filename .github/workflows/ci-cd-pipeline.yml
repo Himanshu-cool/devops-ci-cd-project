@@ -51,40 +51,40 @@ jobs:
           cd Frontend/frontend-app
           npm run build
 
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Deploy to EC2
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_USER: ${{ secrets.EC2_USER }}
-          EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
-        run: |
-          echo "$EC2_KEY" > private_key.pem
-          chmod 600 private_key.pem
-          
-          ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
-            cd /home/ubuntu/devops-ci-cd-project
-            git pull origin main
-            
-            # Deploy Backend
-            cd Backend
-            source venv/bin/activate
-            pip install -r requirements.txt
-            sudo systemctl restart backend
-            
-            # Deploy Frontend
-            cd ../Frontend/frontend-app
-            npm install
-            npm run build
-            sudo systemctl restart frontend
-          EOF
-          
-          rm -f private_key.pem
+  # deploy:
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #
+  #     - name: Deploy to EC2
+  #       env:
+  #         EC2_HOST: ${{ secrets.EC2_HOST }}
+  #         EC2_USER: ${{ secrets.EC2_USER }}
+  #         EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
+  #       run: |
+  #         echo "$EC2_KEY" > private_key.pem
+  #         chmod 600 private_key.pem
+  #         
+  #         ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
+  #           cd /home/ubuntu/devops-ci-cd-project
+  #           git pull origin main
+  #           
+  #           # Deploy Backend
+  #           cd Backend
+  #           source venv/bin/activate
+  #           pip install -r requirements.txt
+  #           sudo systemctl restart backend
+  #           
+  #           # Deploy Frontend
+  #           cd ../Frontend/frontend-app
+  #           npm install
+  #           npm run build
+  #           sudo systemctl restart frontend
+  #         EOF
+  #         
+  #         rm -f private_key.pem
 
